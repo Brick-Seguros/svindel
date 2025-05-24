@@ -149,6 +149,7 @@ func buildExtractionPrompt(userInput string) string {
 		User input: "%s"
 
 		Extract the document and its type (CPF, CNPJ, Name, Plate, Email, Phone, Address). 
+		Remember that it can be a CPF, CNPJ, Name, Plate, Email, Phone or a Address.
 		If no document is found, classify it as "None".
 		Return in JSON with fields: document (string) and type (CPF, CNPJ, Name, Plate, Email, Phone, Address, None).
 		Only return valid JSON.`,
@@ -171,4 +172,5 @@ const systemExtractionPrompt = `
 	- "type": the document type or "NONE" if no document is found.
 	- If the input is a general question with no document, set "type" to "NONE".
 	- Do not include any text besides the JSON.
+	- Try your best to recognize a document even if it's not in the exact format.
 `

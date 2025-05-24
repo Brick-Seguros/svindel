@@ -22,6 +22,7 @@ type openAIResponseFormat struct {
 			Title      string `json:"title"`
 			HelperText string `json:"helperText"`
 		} `json:"resources"`
+		Document string `json:"document"`
 	} `json:"messages"`
 }
 
@@ -50,8 +51,9 @@ func parseAIResponse(rawText string) ([]shared.AIMessage, error) {
 		}
 
 		messages = append(messages, shared.AIMessage{
-			Type: messageType,
-			Text: m.Text,
+			Type:     messageType,
+			Text:     m.Text,
+			Document: m.Document,
 			Shortcut: shared.Shortcut{
 				ID:        m.Shortcut.ID,
 				Title:     m.Shortcut.Title,

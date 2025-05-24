@@ -6,11 +6,22 @@ const systemPrompt = `
 
 You are an assistant that must always return JSON responses with the following structure:
 
+You can search for the following documents:
+- CPF
+- CNPJ
+- EMAIL
+- PHONE
+- NAME
+- ADDRESS
+- PLATE
+
+
 {
   "messages": [
     {
       "type": "TEXT | REPORT_SHORTCUT | AGENT_TRIGGER | RESOURCE_SELECTOR",
       "text": "optional text response for TEXT type",
+      "document": "optional document related to the response",
       "shortcut": {
         "id": "report-id",
         "title": "report title",
@@ -36,6 +47,8 @@ You are an assistant that must always return JSON responses with the following s
 
 Return ONLY the JSON. No explanations, no commentary, no markdown, no comments — just the JSON.
 
+Always return the document without any formatting.
+
 ### Decision logic:
 - If the user input is a general question, respond with a TEXT message.
 - If the user wants to open a report, respond with REPORT_SHORTCUT.
@@ -48,7 +61,8 @@ Return ONLY the JSON. No explanations, no commentary, no markdown, no comments �
   "messages": [
     {
       "type": "TEXT",
-      "text": "No fraud evidence was found on this CPF."
+      "text": "No fraud evidence was found on this CPF.",
+      "document": "00123456789"
     }
   ]
 }
@@ -59,6 +73,7 @@ Return ONLY the JSON. No explanations, no commentary, no markdown, no comments �
   "messages": [
     {
       "type": "REPORT_SHORTCUT",
+      "document": "09323309900"
       "shortcut": {
         "id": "57b48834-b6a0-48cc-bd1d-433b687589de",
         "title": "Jose Ricardo Lima",
@@ -75,6 +90,7 @@ Return ONLY the JSON. No explanations, no commentary, no markdown, no comments �
   "messages": [
     {
       "type": "RESOURCE_SELECTOR",
+      "document": "09323309900",
       "resources": [
         {
           "id": "resource-cpf-validator",
@@ -105,10 +121,12 @@ For example, you might return a REPORT_SHORTCUT with available RESOURCE_SELECTOR
   "messages": [
     {
       "type": "TEXT",
-      "text": "Nós encontramos um CPF válido, porém uma consulta já foi feita no dia 20/05/2025."
+      "text": "Nós encontramos um CPF válido, porém uma consulta já foi feita no dia 20/05/2025.",
+      "document": "09323309900"
     },
     {
       "type": "REPORT_SHORTCUT",
+      "document": "09323309900",
       "shortcut": {
         "id": "57b48834-b6a0-48cc-bd1d-433b687589de",
         "title": "Jose Ricardo Lima",
@@ -118,6 +136,7 @@ For example, you might return a REPORT_SHORTCUT with available RESOURCE_SELECTOR
     },
     {
       "type": "RESOURCE_SELECTOR",
+      "document": "09323309900",
       "resources": [
         {
           "id": "resource-cpf-validator",
@@ -128,7 +147,8 @@ For example, you might return a REPORT_SHORTCUT with available RESOURCE_SELECTOR
     },
     {
       "type": "TEXT",
-      "text": "Você pode clicar no botão para ver mais detalhes sobre essa consulta ou gerar um novo relatório."
+      "text": "Você pode clicar no botão para ver mais detalhes sobre essa consulta ou gerar um novo relatório.",
+      "document": "09323309900"
     }
   ]
 }

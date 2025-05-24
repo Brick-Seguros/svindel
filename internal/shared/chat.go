@@ -24,10 +24,11 @@ const (
 )
 
 type AIMessage struct {
-	Type      AIMessageType
-	Text      string
-	Shortcut  Shortcut
-	Resources []Resource
+	Type      AIMessageType `json:"type"`
+	Document  string        `json:"document"`
+	Text      string        `json:"text"`
+	Shortcut  Shortcut      `json:"shortcut"`
+	Resources []Resource    `json:"resources"`
 	// - TEXT: slice of texts
 	// - REPORT_SHORTCUT: slice with Report IDs
 	// - AGENT_TRIGGER: slice with Agent IDs
@@ -35,16 +36,16 @@ type AIMessage struct {
 }
 
 type Shortcut struct {
-	ID        string
-	Title     string
-	Document  string
-	CreatedAt string
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Document  string `json:"document"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type Resource struct {
-	ID         string
-	Title      string
-	HelperText string
+	ID         string `json:"id"`
+	Title      string `json:"title"`
+	HelperText string `json:"helperText"`
 }
 
 type AIResponse struct {
