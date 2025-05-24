@@ -15,6 +15,14 @@ func (m *MockReportService) GetReportsForDocument(doc string, docType shared.Doc
 	return m.ExpectedReports, nil
 }
 
+type MockResourceService struct {
+	ExpectedResources []shared.Resource
+}
+
+func (m *MockResourceService) GetResourcesByDocType(docType shared.DocType) []shared.Resource {
+	return m.ExpectedResources
+}
+
 func TestRetriever_Retrieve(t *testing.T) {
 	mockReports := []shared.ReportResult{
 		{
@@ -29,7 +37,19 @@ func TestRetriever_Retrieve(t *testing.T) {
 		ExpectedReports: mockReports,
 	}
 
-	retriever := New(mockService)
+	mockResources := []shared.Resource{
+		{
+			ID:         "resource-123",
+			Title:      "Fraud Check",
+			HelperText: "Check if the document is fraudulent",
+		},
+	}
+
+	mockResourceService := &MockResourceService{
+		ExpectedResources: mockResources,
+	}
+
+	retriever := New(mockService, mockResourceService)
 
 	result := retriever.Retrieve("09719197986", shared.DocTypeCPF)
 
@@ -55,8 +75,9 @@ func TestRetriever_Retrieve(t *testing.T) {
 
 func TestRetriever_ResourcesForEachDocType(t *testing.T) {
 	mockService := &MockReportService{}
+	mockResourceService := &MockResourceService{}
 
-	retriever := New(mockService)
+	retriever := New(mockService, mockResourceService)
 
 	tests := []struct {
 		docType            shared.DocType

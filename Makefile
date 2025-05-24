@@ -5,7 +5,7 @@ APP_NAME = svindel
 
 # Run all tests
 test: ## Run all tests
-	go test -v ./...
+	go test ./...
 
 # Run all tests with race detector
 test-race: ## Run all tests with race detector

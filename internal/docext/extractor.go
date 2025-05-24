@@ -58,6 +58,16 @@ func (e *OpenAiExtractor) Extract(input string) shared.ExtractionResult {
 		}
 	}
 
+	// --- Regex Email ---
+	emailPattern := regexp.MustCompile(`[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}`)
+	if email := emailPattern.FindString(input); email != "" {
+		return shared.ExtractionResult{
+			Document:     email,
+			DocumentType: shared.DocTypeEmail,
+			IsQuestion:   false,
+		}
+	}
+
 	// --- Fallback to OpenAI ---
 	if e.openai == nil {
 		return shared.ExtractionResult{
@@ -138,9 +148,9 @@ func buildExtractionPrompt(userInput string) string {
 	return fmt.Sprintf(`
 		User input: "%s"
 
-		Extract the document and its type (CPF, CNPJ, Name, Plate). 
+		Extract the document and its type (CPF, CNPJ, Name, Plate, Email, Phone, Address). 
 		If no document is found, classify it as "None".
-		Return in JSON with fields: document (string) and type (CPF, CNPJ, Name, Plate, None).
+		Return in JSON with fields: document (string) and type (CPF, CNPJ, Name, Plate, Email, Phone, Address, None).
 		Only return valid JSON.`,
 		userInput,
 	)
@@ -153,7 +163,7 @@ const systemExtractionPrompt = `
 
 	{
 		"document": string,
-		"type": "CPF" | "CNPJ" | "NAME" | "PLATE" | "NONE"
+		"type": "CPF" | "CNPJ" | "NAME" | "PLATE" | "EMAIL" | "PHONE" | "ADDRESS" | "NONE"
 	}
 
 	Rules:

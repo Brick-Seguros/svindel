@@ -7,21 +7,30 @@ import (
 )
 
 type Retriever struct {
-	reportService shared.Report
+	reportService   shared.Report
+	resourceService shared.ResourceService
 }
 
-func New(reportService shared.Report) *Retriever {
+func New(reportService shared.Report, resourceService shared.ResourceService) *Retriever {
 	return &Retriever{
-		reportService: reportService,
+		reportService:   reportService,
+		resourceService: resourceService,
 	}
 }
 
 func (r *Retriever) Retrieve(doc string, docType shared.DocType) shared.ContextResult {
 	// Fetch reports
-	reports, err := r.reportService.GetReportsForDocument(doc, docType)
-	if err != nil {
-		fmt.Println("Error fetching reports:", err)
-		return shared.ContextResult{}
+
+	reports := []shared.ReportResult{}
+
+	if docType == shared.DocTypeCPF || docType == shared.DocTypeCNPJ {
+		retrievedReports, err := r.reportService.GetReportsForDocument(doc, docType)
+		if err != nil {
+			fmt.Println("Error fetching reports:", err)
+			return shared.ContextResult{}
+		}
+
+		reports = append(reports, retrievedReports...)
 	}
 
 	// Static resource mapping example
