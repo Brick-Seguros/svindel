@@ -42,7 +42,4 @@ Svindel is a **completion engine for fraud detection workflows.** It transforms 
      - `AGENT_TRIGGER`
      - `RESOURCE_SELECTOR`
 
----
-
-## 📦 Project Structure
 
