@@ -111,7 +111,6 @@ Permitir que o chat de IA seja **contextualizado a uma execução específica de
 - 🔄 Essencial para auditar, revisar ou expandir análises em andamento.
 - ✔️ Permite interações no contexto de uma automação ou fluxo operacional específico.
 
----
 
 ### 🕸️ Text to Graph
 Transformar texto livre em uma estrutura de dados baseada em **grafo de entidades e relações**.
@@ -120,7 +119,6 @@ Transformar texto livre em uma estrutura de dados baseada em **grafo de entidade
 - 🔗 Base para investigações antifraude, detecção de redes e enriquecimento de dados.
 - ✔️ Permite criar visualizações e análises de redes de relacionamentos automaticamente.
 
----
 
 ### 🧠 Abstract the OpenAI Vendor
 Implementar uma camada de abstração que permita **trocar facilmente o provedor de LLM**, como:
