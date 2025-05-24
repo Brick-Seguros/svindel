@@ -42,4 +42,13 @@ Svindel is a **completion engine for fraud detection workflows.** It transforms 
      - `AGENT_TRIGGER`
      - `RESOURCE_SELECTOR`
 
+---
+
+## Next Steps
+
+- Connect the Retrieval package to the database and Brick API.
+- Implement "Talk to One Report".
+- Implement "Talk to One Flow Execution".
+- Implement "Text to Graph".
+- Abstract the OpenAI vendor from the completion package.
 
