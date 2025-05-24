@@ -12,21 +12,25 @@ import (
 	openai_sdk "github.com/sashabaranov/go-openai"
 )
 
-type Extractor struct {
+type Extractor interface {
+	Extract(input string) shared.ExtractionResult
+}
+
+type OpenAiExtractor struct {
 	openai *openai_sdk.Client
 }
 
-func NewExtractor(openaiKey string) *Extractor {
+func NewOpenAiExtractor(openaiKey string) Extractor {
 	client := openai_sdk.NewClient(openaiKey)
-	return &Extractor{openai: client}
+	return &OpenAiExtractor{openai: client}
 }
 
-func (e *Extractor) Extract(input string) shared.ExtractionResult {
-	inputLower := strings.ToLower(input)
+func (e *OpenAiExtractor) Extract(input string) shared.ExtractionResult {
+	// input := strings.ToLower(input)
 
 	// --- Regex CPF ---
 	cpfPattern := regexp.MustCompile(`\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b`)
-	if cpf := cpfPattern.FindString(inputLower); cpf != "" {
+	if cpf := cpfPattern.FindString(input); cpf != "" {
 		return shared.ExtractionResult{
 			Document:     cpf,
 			DocumentType: shared.DocTypeCPF,
@@ -36,7 +40,7 @@ func (e *Extractor) Extract(input string) shared.ExtractionResult {
 
 	// --- Regex CNPJ ---
 	cnpjPattern := regexp.MustCompile(`\b\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}\b`)
-	if cnpj := cnpjPattern.FindString(inputLower); cnpj != "" {
+	if cnpj := cnpjPattern.FindString(input); cnpj != "" {
 		return shared.ExtractionResult{
 			Document:     cnpj,
 			DocumentType: shared.DocTypeCNPJ,
@@ -46,7 +50,7 @@ func (e *Extractor) Extract(input string) shared.ExtractionResult {
 
 	// --- Regex Plate ---
 	platePattern := regexp.MustCompile(`[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}`)
-	if plate := platePattern.FindString(inputLower); plate != "" {
+	if plate := platePattern.FindString(input); plate != "" {
 		return shared.ExtractionResult{
 			Document:     plate,
 			DocumentType: shared.DocTypePlate,
@@ -55,10 +59,18 @@ func (e *Extractor) Extract(input string) shared.ExtractionResult {
 	}
 
 	// --- Fallback to OpenAI ---
+	if e.openai == nil {
+		return shared.ExtractionResult{
+			Document:     "",
+			DocumentType: shared.DocTypeNone,
+			IsQuestion:   true,
+		}
+	}
+
 	return e.extractWithLLM(input)
 }
 
-func (e *Extractor) extractWithLLM(input string) shared.ExtractionResult {
+func (e *OpenAiExtractor) extractWithLLM(input string) shared.ExtractionResult {
 	prompt := buildExtractionPrompt(input)
 
 	resp, err := e.openai.CreateChatCompletion(

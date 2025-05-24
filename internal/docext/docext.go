@@ -6,13 +6,13 @@ import (
 
 type DocExt struct {
 	Extractor Extractor
-	Retriever Retriever
+	Retriever shared.Retriever
 }
 
 func New(
 	extractor Extractor,
-	retriever Retriever,
-) *DocExt {
+	retriever shared.Retriever,
+) shared.DocExt {
 	return &DocExt{
 		Extractor: extractor,
 		Retriever: retriever,
@@ -21,7 +21,7 @@ func New(
 
 func (d *DocExt) Process(
 	userMessage string,
-) (augmentedPrompt string, extraction shared.ExtractionResult, context ContextResult) {
+) (augmentedPrompt string, extraction shared.ExtractionResult, context shared.ContextResult) {
 	// Step 1 — Extract document from prompt
 	extraction = d.Extractor.Extract(userMessage)
 
@@ -33,5 +33,5 @@ func (d *DocExt) Process(
 		augmentedPrompt = userMessage
 	}
 
-	return
+	return augmentedPrompt, extraction, context
 }

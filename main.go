@@ -2,11 +2,15 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"svindel/cmd/httpsrv"
-	"svindel/internal/chat.go"
+	"svindel/internal/chat"
 	"svindel/internal/completion"
 	"svindel/internal/docext"
+	"svindel/internal/report"
+	reportinfra "svindel/internal/report/infra"
+	"svindel/internal/retriever"
 	"svindel/pkg/loadenv"
 )
 
@@ -18,11 +22,15 @@ func main() {
 		panic(err)
 	}
 
+	reportRepo := reportinfra.NewReportAPIRepository(env.ReportAPIBaseURL, env.ReportAPIToken, &http.Client{})
+	reportService := report.New(reportRepo)
+
 	completion := completion.New(env.OpenaiApiKey)
 
-	extractor := docext.NewExtractor(env.OpenaiApiKey)
-	retriever := docext.NewRetriever()
-	docExt := docext.New(*extractor, retriever)
+	extractor := docext.NewOpenAiExtractor(env.OpenaiApiKey)
+	retriever := retriever.New(reportService)
+
+	docExt := docext.New(extractor, retriever)
 
 	chatService := chat.New(completion, docExt)
 

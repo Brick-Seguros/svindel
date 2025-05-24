@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	chat "svindel/internal/chat.go"
+	chat "svindel/internal/chat"
 )
 
 type ChatRequest struct {
@@ -39,7 +39,7 @@ func HandleChatMessage(service *chat.Service) http.HandlerFunc {
 
 		var texts []string
 		for _, msg := range resp.Messages {
-			texts = append(texts, msg.Content...)
+			texts = append(texts, msg.Text)
 		}
 
 		w.Header().Set("Content-Type", "application/json")

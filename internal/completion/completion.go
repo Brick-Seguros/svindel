@@ -29,6 +29,8 @@ func New(apiKey string) *Client {
 func (c *Client) GenerateResponse(chatContext shared.Chat) (shared.AIResponse, error) {
 	messages := convertToOpenAIMessages(chatContext)
 
+	fmt.Println("messages", messages)
+
 	resp, err := c.api.CreateChatCompletion(
 		context.Background(),
 		openai_sdk.ChatCompletionRequest{

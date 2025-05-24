@@ -24,7 +24,7 @@ func convertToOpenAIMessages(c shared.Chat) []openai_sdk.ChatCompletionMessage {
 			if aiMsg.Type == shared.AIMessageTypeText {
 				messages = append(messages, openai_sdk.ChatCompletionMessage{
 					Role:    openai_sdk.ChatMessageRoleAssistant,
-					Content: joinContent(aiMsg.Content),
+					Content: aiMsg.Text,
 				})
 			}
 		}
@@ -40,12 +40,4 @@ func convertToOpenAIMessages(c shared.Chat) []openai_sdk.ChatCompletionMessage {
 	}
 
 	return messages
-}
-
-func joinContent(parts []string) string {
-	result := ""
-	for _, p := range parts {
-		result += p
-	}
-	return result
 }

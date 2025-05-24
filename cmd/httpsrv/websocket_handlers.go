@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	chat "svindel/internal/chat.go"
+	chat "svindel/internal/chat"
 
 	"github.com/gorilla/websocket"
 )

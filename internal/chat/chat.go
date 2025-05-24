@@ -3,17 +3,16 @@ package chat
 import (
 	"time"
 
-	docext "svindel/internal/docext"
 	shared "svindel/internal/shared"
 	idgen "svindel/pkg/idgen"
 )
 
 type Service struct {
 	ai     AIProvider
-	docExt *docext.DocExt
+	docExt shared.DocExt
 }
 
-func New(ai AIProvider, docExt *docext.DocExt) *Service {
+func New(ai AIProvider, docExt shared.DocExt) *Service {
 	return &Service{
 		ai:     ai,
 		docExt: docExt,

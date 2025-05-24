@@ -24,12 +24,27 @@ const (
 )
 
 type AIMessage struct {
-	Type    AIMessageType
-	Content []string // Depending on Type:
+	Type      AIMessageType
+	Text      string
+	Shortcut  Shortcut
+	Resources []Resource
 	// - TEXT: slice of texts
 	// - REPORT_SHORTCUT: slice with Report IDs
 	// - AGENT_TRIGGER: slice with Agent IDs
 	// - RESOURCE_SELECTOR: slice with Resource IDs
+}
+
+type Shortcut struct {
+	ID        string
+	Title     string
+	Document  string
+	CreatedAt string
+}
+
+type Resource struct {
+	ID         string
+	Title      string
+	HelperText string
 }
 
 type AIResponse struct {
