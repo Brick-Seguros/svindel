@@ -93,7 +93,7 @@ Svindel provides dynamically suggested resources per document type:
     }
   ]
 }
-
+```
 ---
 
 ## 🔥 Próximos Passos
