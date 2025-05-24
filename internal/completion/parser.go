@@ -58,6 +58,13 @@ func parseAIResponse(rawText string) ([]shared.AIMessage, error) {
 				Document:  m.Shortcut.Document,
 				CreatedAt: m.Shortcut.CreatedAt,
 			},
+			Resources: func() []shared.Resource {
+				resources := []shared.Resource{}
+				for _, r := range m.Resources {
+					resources = append(resources, shared.Resource{ID: r.ID, Title: r.Title, HelperText: r.HelperText})
+				}
+				return resources
+			}(),
 		})
 	}
 

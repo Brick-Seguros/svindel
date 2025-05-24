@@ -43,40 +43,5 @@ func (r *Retriever) Retrieve(doc string, docType shared.DocType) shared.ContextR
 }
 
 func (r *Retriever) resourcesForDocType(docType shared.DocType) []shared.Resource {
-	switch docType {
-	case shared.DocTypeCPF:
-		return []shared.Resource{
-			{
-				ID:         "resource-validate-cpf",
-				Title:      "Validate CPF",
-				HelperText: "Validate a CPF number",
-			},
-		}
-	case shared.DocTypeCNPJ:
-		return []shared.Resource{
-			{
-				ID:         "resource-check-cnpj",
-				Title:      "Check CNPJ",
-				HelperText: "Check a CNPJ number",
-			},
-		}
-	case shared.DocTypePlate:
-		return []shared.Resource{
-			{
-				ID:         "resource-plate-history",
-				Title:      "Plate History",
-				HelperText: "Get the history of a plate number",
-			},
-		}
-	case shared.DocTypeName:
-		return []shared.Resource{
-			{
-				ID:         "resource-person-search",
-				Title:      "Person Search",
-				HelperText: "Search for a person",
-			},
-		}
-	default:
-		return []shared.Resource{}
-	}
+	return r.resourceService.GetResourcesByDocType(docType)
 }

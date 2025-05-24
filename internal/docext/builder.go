@@ -32,7 +32,7 @@ func BuildResourcesSection(resources []shared.Resource) string {
 
 	for _, r := range resources {
 		result += fmt.Sprintf(
-			"- ID: %s | Title: %s | HelperText: %s\n",
+			"\n -- ID: %s | Title: %s | HelperText: %s\n",
 			r.ID, r.Title, r.HelperText,
 		)
 	}
@@ -57,7 +57,7 @@ func BuildPromptWithContext(
 	- Document: %s
 	- Type: %s
 	- %v
-	- Available Resources: %v
+	- %v
 
 
 	---------
