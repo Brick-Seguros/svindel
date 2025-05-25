@@ -16,11 +16,11 @@ func (m *MockReportService) GetReportsForDocument(doc string, docType shared.Doc
 }
 
 type MockResourceService struct {
-	ExpectedResources []shared.Resource
+	ExpectedResources map[shared.DocType][]shared.Resource
 }
 
 func (m *MockResourceService) GetResourcesByDocType(docType shared.DocType) []shared.Resource {
-	return m.ExpectedResources
+	return m.ExpectedResources[docType]
 }
 
 func TestRetriever_Retrieve(t *testing.T) {
@@ -39,14 +39,16 @@ func TestRetriever_Retrieve(t *testing.T) {
 
 	mockResources := []shared.Resource{
 		{
-			ID:         "resource-123",
+			ID:         "resource-validate-cpf",
 			Title:      "Fraud Check",
 			HelperText: "Check if the document is fraudulent",
 		},
 	}
 
 	mockResourceService := &MockResourceService{
-		ExpectedResources: mockResources,
+		ExpectedResources: map[shared.DocType][]shared.Resource{
+			shared.DocTypeCPF: mockResources,
+		},
 	}
 
 	retriever := New(mockService, mockResourceService)
@@ -75,7 +77,38 @@ func TestRetriever_Retrieve(t *testing.T) {
 
 func TestRetriever_ResourcesForEachDocType(t *testing.T) {
 	mockService := &MockReportService{}
-	mockResourceService := &MockResourceService{}
+	mockResourceService := &MockResourceService{
+		ExpectedResources: map[shared.DocType][]shared.Resource{
+			shared.DocTypeCPF: {
+				{
+					ID:         "resource-validate-cpf",
+					Title:      "Validate CPF",
+					HelperText: "Check if the document is valid",
+				},
+			},
+			shared.DocTypeCNPJ: {
+				{
+					ID:         "resource-check-cnpj",
+					Title:      "Check CNPJ",
+					HelperText: "Check if the document is valid",
+				},
+			},
+			shared.DocTypePlate: {
+				{
+					ID:         "resource-plate-history",
+					Title:      "Plate History",
+					HelperText: "Check if the plate is valid",
+				},
+			},
+			shared.DocTypeName: {
+				{
+					ID:         "resource-person-search",
+					Title:      "Person Search",
+					HelperText: "Check if the person is valid",
+				},
+			},
+		},
+	}
 
 	retriever := New(mockService, mockResourceService)
 
