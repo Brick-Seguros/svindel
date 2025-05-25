@@ -1,0 +1,43 @@
+{
+  "ID": "e7335cb1-6ba7-46b1-8258-91c577ea9a63",
+  "Input": {
+    "UserInput": "Guilherme Ninov de Meira\n",
+    "Context": "",
+    "AIResponse": {
+      "Document": "",
+      "DocumentType": "NONE",
+      "IsQuestion": true
+    }
+  },
+  "Results": [
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "extracted_document_type",
+      "Value": "NAME"
+    },
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "extracted_document_value",
+      "Value": ""
+    },
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "expected_document_type",
+      "Value": "NAME"
+    },
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "expected_document_value",
+      "Value": "Guilherme Ninov de Meira"
+    },
+    {
+      "CriteriaType": "tag",
+      "CriteriaName": "tags",
+      "Value": "missing, wrong_type"
+    }
+  ],
+  "Comments": "The AI failed to identify the input as a NAME type.",
+  "Rating": "bad",
+  "Strategy": "entity_recognition",
+  "EvaluatedAt": "2025-05-25T16:02:38.512602-03:00"
+}

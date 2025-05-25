@@ -17,12 +17,15 @@ type Extractor interface {
 }
 
 type OpenAiExtractor struct {
-	openai *openai_sdk.Client
+	openai      *openai_sdk.Client
+	evalService shared.Evaluator
 }
 
-func NewOpenAiExtractor(openaiKey string) Extractor {
+func NewOpenAiExtractor(openaiKey string,
+	evalService shared.Evaluator,
+) Extractor {
 	client := openai_sdk.NewClient(openaiKey)
-	return &OpenAiExtractor{openai: client}
+	return &OpenAiExtractor{openai: client, evalService: evalService}
 }
 
 func (e *OpenAiExtractor) Extract(input string) shared.ExtractionResult {
@@ -77,7 +80,14 @@ func (e *OpenAiExtractor) Extract(input string) shared.ExtractionResult {
 		}
 	}
 
-	return e.extractWithLLM(input)
+	res := e.extractWithLLM(input)
+
+	e.evalService.EvaluateAsync(shared.EvaluationRequest{
+		UserInput:  input,
+		AIResponse: res,
+	})
+
+	return res
 }
 
 func (e *OpenAiExtractor) extractWithLLM(input string) shared.ExtractionResult {

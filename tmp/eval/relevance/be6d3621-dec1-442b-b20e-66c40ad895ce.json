@@ -1,0 +1,28 @@
+{
+  "ID": "be6d3621-dec1-442b-b20e-66c40ad895ce",
+  "Input": {
+    "UserInput": "Guilherme Ninov de Meira\n",
+    "Context": "",
+    "AIResponse": {
+      "Document": "",
+      "DocumentType": "NONE",
+      "IsQuestion": true
+    }
+  },
+  "Results": [
+    {
+      "CriteriaType": "score",
+      "CriteriaName": "relevance_score",
+      "Value": "0"
+    },
+    {
+      "CriteriaType": "tag",
+      "CriteriaName": "tags",
+      "Value": "irrelevant"
+    }
+  ],
+  "Comments": "The AI response does not provide any relevant information or context related to the user input or fraud detection.",
+  "Rating": "bad",
+  "Strategy": "relevance",
+  "EvaluatedAt": "2025-05-25T16:02:38.58171-03:00"
+}
