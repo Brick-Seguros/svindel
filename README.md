@@ -7,14 +7,22 @@ Svindel helps detect fraud, analyze documents (CPF, CNPJ, Name, Plate, Email, Ph
 
 ## 🚀 What Is Svindel?
 
-Svindel is a **completion engine for fraud detection workflows.** It transforms raw user prompts or queries into intelligent, structured AI responses.
+Svindel is a **completion engine for fraud detection workflows.** It transforms raw user prompts or queries into intelligent, structured AI responses and evaluates their quality with AI-powered judges.
 
-### ✅ Svindel Capabilities:
+---
+
+## ✅ Svindel Capabilities
+
 - 🔍 **Document & Entity Extraction:** Detects CPF, CNPJ, Name, Plate, Email, Phone, or Address inside natural language prompts.
 - 🔗 **Contextual Retrieval:** Queries internal systems for relevant **Reports** and **Resources** based on detected documents or input types.
 - 🧠 **Prompt Augmentation:** Automatically injects retrieved data into AI prompts for enriched completions.
 - 💬 **AI Completions:** Generates **structured multi-message responses** using LLMs (OpenAI-powered, backend-agnostic).
-- 🔧 **Tool Execution:** Suggests validators, enrichments, and APIs relevant to phones, emails, or addresses.
+- 🔧 **Tool Execution:** Suggests validators, enrichments, and APIs relevant to phones, emails, addresses, and documents.
+- 🎯 **AI Response Evaluation:** Automated evaluation of AI responses for:
+  - ✅ **Entity Recognition Correctness**
+  - ✅ **Relevance to the user’s input**
+  - ✅ **Hallucination Risk** (invented data)
+  - 🧠 (Planned) Accuracy, Completeness, Reasoning Quality, and Toxicity detection.
 - 🌐 **APIs:** Exposes completion services via **REST** and **WebSocket** interfaces for both synchronous and streaming responses.
 
 ---
@@ -54,6 +62,17 @@ Svindel is a **completion engine for fraud detection workflows.** It transforms 
      - `RESOURCE_SELECTOR` → Suggested validators, APIs, and checks.
      - `AGENT_TRIGGER` → Trigger specialized AI agents (planned).
 
+5. **Automated Evaluation (Eval Engine)**
+   - AI responses are automatically evaluated in the background based on:
+     - 🔎 **Entity Recognition:** Did the AI detect the correct document type (CPF, CNPJ, Plate, etc.)?
+     - 🎯 **Relevance:** Is the response relevant to the user's input and context?
+     - 🚫 **Hallucination Risk:** Did the AI invent any data not present in the context (e.g., fake reports or resources)?
+   - ✔️ Generates a structured `EvaluationResult` containing:
+     - Scorecards
+     - Risk Levels
+     - Tags (e.g., `correct`, `minor_hallucination`, `irrelevant`)
+     - Comments for traceability.
+
 ---
 
 ## 🧠 Resource Catalog
@@ -66,17 +85,21 @@ Svindel provides dynamically suggested resources per document type:
 | CNPJ           | KYB, Balanço Patrimonial, Análise de Crédito       |
 | Plate          | Gravame, Débitos, Sinistros, Donos                 |
 | Email          | Validador de E-mail                                |
-| Phone          | Validador de Telefone, Consulta de IMEI           |
-| Address        | Validador de Endereço, Área de Risco, Google Search |
+| Phone          | Validador de Telefone, Consulta de IMEI            |
+| Address        | Validador de Endereço, Área de Risco, Google Search|
 | Name           | Google Search                                       |
 
 ---
 
-## 🧩 Response Structure Example
+## 🧩 AI Response Structure Example
 
 ```json
 {
   "messages": [
+    {
+      "type": "TEXT",
+      "text": "Encontramos algumas análises já realizadas nesse CPF"
+    },
     {
       "type": "REPORT_SHORTCUT",
       "shortcut": { "id": "report-123", "title": "Análise CPF", ... }
@@ -94,36 +117,86 @@ Svindel provides dynamically suggested resources per document type:
   ]
 }
 ```
+
 ---
 
-## 🔥 Próximos Passos
+## 🧠 Evaluation Result Example
+
+```json
+{
+  "ID": "e7335cb1-6ba7-46b1-8258-91c577ea9a63",
+  "Input": {
+    "UserInput": "Guilherme Ninov de Meira\n",
+    "Context": "",
+    "AIResponse": {
+      "Document": "",
+      "DocumentType": "NONE",
+      "IsQuestion": true
+    }
+  },
+  "Results": [
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "extracted_document_type",
+      "Value": "NAME"
+    },
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "extracted_document_value",
+      "Value": ""
+    },
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "expected_document_type",
+      "Value": "NAME"
+    },
+    {
+      "CriteriaType": "field",
+      "CriteriaName": "expected_document_value",
+      "Value": "Guilherme Ninov de Meira"
+    },
+    {
+      "CriteriaType": "tag",
+      "CriteriaName": "tags",
+      "Value": "missing, wrong_type"
+    }
+  ],
+  "Comments": "The AI failed to identify the input as a NAME type.",
+  "Rating": "bad",
+  "Strategy": "entity_recognition",
+  "EvaluatedAt": "2025-05-25T16:02:38.512602-03:00"
+}
+```
+
+## 🔥 Next Steps
 
 ### 📄 Talk to One Report
-Permitir que o chat de IA seja **contextualizado a um único report**.
+Enable the AI chat to be **contextualized to a single report.**
 
-- O AI responderá considerando exclusivamente os dados, recursos e histórico vinculados a um report específico.
-- 🔍 Útil para investigações aprofundadas sobre um único caso ou análise.
+- The AI will respond considering **only the data, resources, and history linked to that specific report.**
+- 🔍 Useful for deep investigations of a specific case or analysis.
+
 
 ### 🔄 Talk to One Flow Execution
-Permitir que o chat de IA seja **contextualizado a uma execução específica de workflow**.
+Enable the AI chat to be **contextualized to a specific workflow execution.**
 
-- O AI terá acesso apenas às variáveis, histórico e resultados daquele fluxo.
-- 🔄 Essencial para auditar, revisar ou expandir análises em andamento.
-- ✔️ Permite interações no contexto de uma automação ou fluxo operacional específico.
+- The AI will have access **only to the variables, history, and results of that workflow execution.**
+- 🔄 Essential for auditing, reviewing, or expanding analyses in progress.
+- ✔️ Supports interactions fully scoped to an automation or operational flow.
 
 
 ### 🕸️ Text to Graph
-Transformar texto livre em uma estrutura de dados baseada em **grafo de entidades e relações**.
+Transform free-form text into a **graph-based structure of entities and relationships.**
 
-- Extrair nomes, documentos, empresas, endereços e suas conexões diretamente a partir de descrições textuais.
-- 🔗 Base para investigações antifraude, detecção de redes e enriquecimento de dados.
-- ✔️ Permite criar visualizações e análises de redes de relacionamentos automaticamente.
+- Extract names, documents, companies, addresses, and their connections directly from textual descriptions.
+- 🔗 Forms the foundation for fraud investigations, network detection, and data enrichment.
+- ✔️ Allows automatic creation of **relationship graphs** for analysis and visualization.
 
 
 ### 🧠 Abstract the OpenAI Vendor
-Implementar uma camada de abstração que permita **trocar facilmente o provedor de LLM**, como:
+Implement an abstraction layer that allows **easily switching the LLM provider**, such as:
 
 - OpenAI
 - Anthropic
 - Google Gemini
-- Modelos open-source (Llama, Mistral, Mixtral, etc.)
+- Open-source models like Llama, Mistral, Mixtral, etc.
