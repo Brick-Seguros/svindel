@@ -200,3 +200,33 @@ Implement an abstraction layer that allows **easily switching the LLM provider**
 - Anthropic
 - Google Gemini
 - Open-source models like Llama, Mistral, Mixtral, etc.
+
+---
+
+## 🚀 How to Run the Project
+
+### 🔑 Environment Variables
+
+Create a `.env` file in the root folder:
+
+```env
+PORT=8080
+OPENAI_API_KEY=your-openai-key
+BRICK_API_URL=https://api.brickseguros.com.br
+BRICK_API_TOKEN=your-brick-api-token
+```
+
+
+### ▶️ Run 
+
+### 1. Install dependencies:
+
+```bash
+make deps
+```
+
+### 2. Run the server:
+
+```bash
+make run
+```
