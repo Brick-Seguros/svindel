@@ -230,3 +230,9 @@ make deps
 ```bash
 make run
 ```
+
+### 3. Websocket Request:
+
+- Connect to ws://localhost:8080/ws/chat
+
+- Send any message
